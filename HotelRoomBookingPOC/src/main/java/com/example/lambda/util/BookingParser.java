@@ -12,12 +12,14 @@ public class BookingParser {
 
     public static Optional<Booking> parseBooking(String requestBody) {
         return Optional.ofNullable(requestBody)                  // Handle null request body
-                .filter(body -> !body.trim().isEmpty())    // Ignore empty strings
+                .filter(body -> !body.trim().isEmpty())         // Ignore empty strings
                 .map(body -> {
                     try {
                         return mapper.readValue(body, Booking.class);
                     } catch (IOException e) {
-                        throw new RuntimeException("Invalid JSON format: " + e.getMessage(), e);
+                        // Log the error if needed
+                        System.err.println("JSON parsing error: " + e.getMessage());
+                        return null;
                     }
                 });
     }
